@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block title %}Teachers / Staff — MM School ERP{% endblock %}{% block heading %}Teachers / Staff{% endblock %}
+{% block content %}
+<div class="page-title"><h2>Teachers / Staff</h2><p>Search and manage teachers and staff</p></div>
+<div class="card"><form class="search-area" method="get"><div class="search-box"><span class="search-icon">⌕</span><input name="q" value="{{ q }}" placeholder="Search teacher/staff by name, ID, phone..."></div>
+<select name="role" class="filter"><option value="">All Roles</option>{% for r in roles %}<option value="{{ r.0 }}" {% if selected_role == r.0 %}selected{% endif %}>{{ r.1 }}</option>{% endfor %}</select><button class="action-btn">Search</button><a class="action-btn" href="{% url 'add_teacher' %}">＋ Add Teacher</a></form>
+<div class="table-wrap"><table><thead><tr><th>Staff ID</th><th>Name</th><th>Role</th><th>Phone</th><th>Joining Date</th><th>Salary</th><th>Action</th></tr></thead>
+<tbody>{% for t in teachers %}<tr><td>{{ t.staff_id }}</td><td><b>{{ t.name }}</b></td><td>{{ t.role }}</td><td>{{ t.phone|default:"-" }}</td><td>{{ t.joining_date|default:"-" }}</td><td>Rs. {{ t.salary }}</td><td><form method="post" action="{% url 'delete_teacher' t.pk %}" style="display:inline">{% csrf_token %}<button class="action-btn" onclick="return confirm('Delete this teacher/staff record?')">Delete</button></form></td></tr>{% empty %}<tr><td colspan="7">No staff found.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

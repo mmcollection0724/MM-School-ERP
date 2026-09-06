@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}MM School ERP{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+
+<body>
+
+<div id="app">
+
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-logo">MM</div>
+        <div class="brand-text">MM School ERP</div>
+    </div>
+
+    <div class="menu">
+
+        <!-- MAIN -->
+        <div class="menu-title">MAIN</div>
+
+        <a href="{% url 'dashboard' %}"
+           class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            Dashboard
+        </a>
+
+
+        <!-- STUDENTS -->
+        <div class="menu-title">STUDENTS</div>
+
+        <a href="{% url 'students' %}">
+            Students
+        </a>
+
+        <a href="{% url 'add_student' %}">
+            Admission Form
+        </a>
+
+
+        <!-- FINANCE -->
+        <div class="menu-title">FINANCE</div>
+
+        <a href="{% url 'fee_collection' %}">
+            Fee Collection
+        </a>
+
+        <a href="{% url 'collect_fee' %}">
+            Collect Fee
+        </a>
+
+        <a href="{% url 'salary' %}">Salary</a>
+
+        <a href="{% url 'expenses' %}">
+            Expenses
+        </a>
+
+
+        <!-- ACADEMIC -->
+<div class="menu-title">Academic</div>
+
+<a href="{% url 'attendance' %}">Attendance</a>
+<a href="{% url 'attendance_report' %}">Attendance Report</a>
+<a href="{% url 'results' %}">Results</a>
+<a href="{% url 'timetable' %}">Timetable</a>
+       
+
+        <!-- MANAGEMENT -->
+        <div class="menu-title">Management</div>
+
+<a href="{% url 'teachers' %}">Teachers / Staff</a>
+<a href="{% url 'library' %}">Library</a>
+<a href="{% url 'notices' %}">Notices</a>
+
+
+                <!-- AI -->
+        <div class="menu-title">AI</div>
+
+        <a href="{% url 'ai_assistant' %}">
+            AI Assistant
+        </a>
+
+
+        <!-- SYSTEM -->
+        <div class="menu-title">SYSTEM</div>
+
+        <a href="/admin/">
+            Settings / Admin
+        </a>
+
+        <a href="{% url 'logout' %}">
+            Logout
+        </a>
+
+    </div>
+
+</aside>
+
+
+<main class="main">
+
+    <div class="topbar">
+        <h2>{% block heading %}Dashboard{% endblock %}</h2>
+
+        <div class="user-box">
+            <span>{{ request.user.username }}</span>
+            <div class="avatar">MM</div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="notice">
+                    <strong>{{ message }}</strong>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+
+    </div>
+
+</main>
+
+</div>
+
+</body>
+</html>

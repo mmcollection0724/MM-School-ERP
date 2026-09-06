@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Library - MM School ERP{% endblock %}
+{% block heading %}Library{% endblock %}
+
+{% block content %}
+
+<div class="page-head">
+    <div>
+        <h1>School Library</h1>
+        <p>Manage books and student book issues.</p>
+    </div>
+</div>
+
+
+<!-- ADD BOOK -->
+
+<div class="form-card">
+
+    <h2 style="margin-bottom:20px;">Add New Book</h2>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <input type="hidden" name="action" value="add_book">
+
+        <div class="form-grid">
+
+            {% for field in book_form %}
+
+            <div>
+                <label>{{ field.label }}</label>
+                {{ field }}
+
+                {% if field.errors %}
+                    <small style="color:#ff6b6b;">
+                        {{ field.errors }}
+                    </small>
+                {% endif %}
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div style="margin-top:20px;">
+            <button type="submit" class="btn">
+                + Add Book
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- BOOK LIST -->
+
+<div class="table-wrap" style="margin-top:20px;">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>ISBN</th>
+                <th>Quantity</th>
+                <th>Available</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for book in books %}
+
+            <tr>
+                <td><b>{{ book.title }}</b></td>
+                <td>{{ book.author|default:"-" }}</td>
+                <td>{{ book.category|default:"-" }}</td>
+                <td>{{ book.isbn|default:"-" }}</td>
+                <td>{{ book.quantity }}</td>
+                <td>{{ book.available }}</td>
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="6">
+                    No books added yet.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- ISSUE BOOK -->
+
+<div class="form-card" style="margin-top:20px;">
+
+    <h2 style="margin-bottom:20px;">Issue Book</h2>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <input type="hidden" name="action" value="issue_book">
+
+        <div class="form-grid">
+
+            {% for field in issue_form %}
+
+            <div>
+                <label>{{ field.label }}</label>
+                {{ field }}
+
+                {% if field.errors %}
+                    <small style="color:#ff6b6b;">
+                        {{ field.errors }}
+                    </small>
+                {% endif %}
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div style="margin-top:20px;">
+            <button type="submit" class="btn">
+                Issue Book
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- ISSUE HISTORY -->
+
+<div class="table-wrap" style="margin-top:20px;">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Student</th>
+                <th>Issue Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for issue in issues %}
+
+            <tr>
+
+                <td>
+                    <b>{{ issue.book.title }}</b>
+                </td>
+
+                <td>{{ issue.student.name }}</td>
+
+                <td>{{ issue.issue_date }}</td>
+
+                <td>
+                    {{ issue.return_date|default:"-" }}
+                </td>
+
+                <td>
+                    {% if issue.returned %}
+                        Returned
+                    {% else %}
+                        Issued
+                    {% endif %}
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="5">
+                    No book issue records yet.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

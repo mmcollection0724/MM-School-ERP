@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Timetable - MM School ERP{% endblock %}
+{% block heading %}Timetable{% endblock %}
+
+{% block content %}
+
+<div class="page-head">
+    <div>
+        <h1>Class Timetable</h1>
+        <p>Create and manage the school timetable.</p>
+    </div>
+</div>
+
+
+<div class="form-card">
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="form-grid">
+
+            {% for field in form %}
+
+            <div>
+                <label>{{ field.label }}</label>
+
+                {{ field }}
+
+                {% if field.errors %}
+                    <small style="color:#ff6b6b;">
+                        {{ field.errors }}
+                    </small>
+                {% endif %}
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div style="margin-top:20px;">
+            <button type="submit" class="btn">
+                Save Timetable
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+
+<div class="table-wrap" style="margin-top:20px;">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Day</th>
+                <th>Period</th>
+                <th>Subject</th>
+                <th>Teacher</th>
+                <th>Start</th>
+                <th>End</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for item in timetables %}
+
+            <tr>
+                <td><b>{{ item.class_name }}</b></td>
+                <td>{{ item.day }}</td>
+                <td>{{ item.period }}</td>
+                <td>{{ item.subject }}</td>
+                <td>{{ item.teacher }}</td>
+                <td>{{ item.start_time|time:"g:i A" }}</td>
+                <td>{{ item.end_time|time:"g:i A" }}</td>
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="7">
+                    No timetable entries yet.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

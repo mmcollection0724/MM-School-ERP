@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Dashboard — MM School ERP{% endblock %}{% block heading %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-title"><h2>Dashboard</h2><p>Welcome to MM School ERP</p></div>
+<div class="stats">
+<div class="card stat-card"><small>Total Students</small><h2>{{ student_count }}</h2><div class="stat-icon">◉</div></div>
+<div class="card stat-card"><small>Total Teachers</small><h2>{{ teacher_count }}</h2><div class="stat-icon">◉</div></div>
+<div class="card stat-card"><small>Total Expenses</small><h2>Rs. {{ expense_total|floatformat:0 }}</h2><div class="stat-icon">₨</div></div>
+<div class="card stat-card"><small>Classes</small><h2>12</h2><div class="stat-icon">▦</div></div>
+</div>
+<div class="grid-2">
+<div class="card"><div class="card-header"><h3>Recent Students</h3><a class="action-btn" href="{% url 'students' %}">View All</a></div>
+<div class="table-wrap"><table><thead><tr><th>Admission ID</th><th>Student</th><th>Class</th><th>Father/Guardian</th></tr></thead><tbody>
+{% for s in recent_students %}<tr><td>{{ s.admission_id }}</td><td><b>{{ s.name }}</b></td><td>{{ s.class_name }}</td><td>{{ s.father }}</td></tr>{% empty %}<tr><td colspan="4">No students yet.</td></tr>{% endfor %}
+</tbody></table></div></div>
+<div class="card"><div class="card-header"><h3>Latest Notices</h3><a class="action-btn" href="{% url 'notices' %}">Manage</a></div>
+{% for n in notices %}<div class="notice"><strong>{{ n.title }}</strong><small>{{ n.text }} • {{ n.date }}</small></div>{% empty %}<p style="color:#777">No notices yet.</p>{% endfor %}
+</div></div>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Salary</h1>
+        <p>Manage teacher and staff salaries</p>
+    </div>
+</div>
+
+<div class="card">
+
+    <h2>Add Salary Record</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-grid">
+
+            <div>
+                <label>Teacher / Staff</label>
+                {{ form.teacher }}
+            </div>
+
+            <div>
+                <label>Month</label>
+                {{ form.month }}
+            </div>
+
+            <div>
+                <label>Amount</label>
+                {{ form.amount }}
+            </div>
+
+            <div>
+                <label>Paid On</label>
+                {{ form.paid_on }}
+            </div>
+
+            <div>
+                <label>Status</label>
+                {{ form.status }}
+            </div>
+
+        </div>
+
+        <div style="margin-top:15px;">
+            <label>Notes</label>
+            {{ form.notes }}
+        </div>
+
+        <button type="submit" class="btn">
+            Save Salary
+        </button>
+
+    </form>
+
+</div>
+
+
+<div class="card" style="margin-top:20px;">
+
+    <h2>Salary History</h2>
+
+    {% if salaries %}
+
+    <div style="overflow-x:auto;">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Staff ID</th>
+                    <th>Name</th>
+                    <th>Month</th>
+                    <th>Amount</th>
+                    <th>Paid On</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for salary in salaries %}
+
+                <tr>
+                    <td>{{ salary.teacher.staff_id }}</td>
+
+                    <td>
+                        {{ salary.teacher.name }}
+                    </td>
+
+                    <td>
+                        {{ salary.month }}
+                    </td>
+
+                    <td>
+                        Rs. {{ salary.amount }}
+                    </td>
+
+                    <td>
+                        {% if salary.paid_on %}
+                            {{ salary.paid_on }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {{ salary.status }}
+                    </td>
+
+                    <td>
+                        {{ salary.notes|default:"—" }}
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+
+    {% else %}
+
+        <p style="color:#888;">
+            No salary records available.
+        </p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load school_tags %}
+
+{% block title %}Attendance - MM School ERP{% endblock %}
+{% block heading %}Attendance{% endblock %}
+
+{% block content %}
+
+<div class="page-head">
+    <div>
+        <h1>Student Attendance</h1>
+        <p>Select class and date to mark attendance.</p>
+    </div>
+</div>
+
+<div class="form-card">
+    <form method="get">
+
+        <div style="display:flex; gap:12px; align-items:end; flex-wrap:wrap;">
+
+            <div>
+                <label>Class</label>
+                <select name="class">
+                    <option value="">Select Class</option>
+
+                    <option value="Nursery" {% if selected_class == "Nursery" %}selected{% endif %}>Nursery</option>
+                    <option value="Prep" {% if selected_class == "Prep" %}selected{% endif %}>Prep</option>
+                    <option value="1st" {% if selected_class == "1st" %}selected{% endif %}>1st</option>
+                    <option value="2nd" {% if selected_class == "2nd" %}selected{% endif %}>2nd</option>
+                    <option value="3rd" {% if selected_class == "3rd" %}selected{% endif %}>3rd</option>
+                    <option value="4th" {% if selected_class == "4th" %}selected{% endif %}>4th</option>
+                    <option value="5th" {% if selected_class == "5th" %}selected{% endif %}>5th</option>
+                    <option value="6th" {% if selected_class == "6th" %}selected{% endif %}>6th</option>
+                    <option value="7th" {% if selected_class == "7th" %}selected{% endif %}>7th</option>
+                    <option value="8th" {% if selected_class == "8th" %}selected{% endif %}>8th</option>
+                    <option value="9th" {% if selected_class == "9th" %}selected{% endif %}>9th</option>
+                    <option value="10th" {% if selected_class == "10th" %}selected{% endif %}>10th</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Date</label>
+                <input type="date" name="date" value="{{ selected_date }}">
+            </div>
+
+            <button type="submit" class="btn">
+                Load Students
+            </button>
+
+        </div>
+
+    </form>
+</div>
+
+{% if selected_class %}
+
+<div class="table-wrap" style="margin-top:20px;">
+
+    <form method="post">
+        {% csrf_token %}
+
+        <input type="hidden" name="class_name" value="{{ selected_class }}">
+        <input type="hidden" name="attendance_date" value="{{ selected_date }}">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Admission ID</th>
+                    <th>Student</th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for student in students %}
+
+                {% with record=attendance_map|get_item:student.id %}
+
+                <tr>
+                    <td>{{ student.admission_id }}</td>
+
+                    <td>
+                        <b>{{ student.name }}</b>
+                    </td>
+
+                    <td>
+                        <select name="status_{{ student.id }}">
+                            <option value="Present"
+                                {% if record and record.status == "Present" %}selected{% endif %}>
+                                Present
+                            </option>
+
+                            <option value="Absent"
+                                {% if record and record.status == "Absent" %}selected{% endif %}>
+                                Absent
+                            </option>
+
+                            <option value="Leave"
+                                {% if record and record.status == "Leave" %}selected{% endif %}>
+                                Leave
+                            </option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <input
+                            type="text"
+                            name="remarks_{{ student.id }}"
+                            value="{% if record %}{{ record.remarks }}{% endif %}"
+                            placeholder="Optional"
+                        >
+                    </td>
+                </tr>
+
+                {% endwith %}
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="4">
+                        No students found in this class.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+        {% if students %}
+        <div style="padding:15px;">
+            <button type="submit" class="btn">
+                Save Attendance
+            </button>
+        </div>
+        {% endif %}
+
+    </form>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

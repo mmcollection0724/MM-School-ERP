@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Students — MM School ERP{% endblock %}{% block heading %}Students{% endblock %}
+{% block content %}
+<div class="page-title"><h2>Students</h2><p>Search and manage student records</p></div>
+<div class="card">
+<form class="search-area" method="get">
+<div class="search-box"><span class="search-icon">⌕</span><input name="q" value="{{ q }}" placeholder="Search student by name, ID, CNIC or phone..."></div>
+<select name="class" class="filter"><option value="">All Classes</option>{% for c in classes %}<option value="{{ c.0 }}" {% if selected_class == c.0 %}selected{% endif %}>{{ c.1 }}</option>{% endfor %}</select>
+<button class="action-btn">Search</button><a class="action-btn" href="{% url 'add_student' %}">＋ Add Student</a>
+</form>
+<div class="search-area">
+<select class="filter" onchange="location.href='?q={{ q|urlencode }}&class='+this.value">
+<option value="">All Classes</option>{% for c in classes %}<option value="{{ c.0 }}" {% if selected_class == c.0 %}selected{% endif %}>{{ c.1 }}</option>{% endfor %}
+</select>
+</div>
+<div class="table-wrap"><table><thead><tr><th>Admission ID</th><th>Student</th><th>Class</th><th>Father/Guardian</th><th>Phone</th><th>Fee</th><th>Action</th></tr></thead>
+<tbody>{% for s in students %}<tr><td>{{ s.admission_id }}</td><td><b>{{ s.name }}</b></td><td>{{ s.class_name }}</td><td>{{ s.father }}</td><td>{{ s.guardian_phone }}</td><td>Rs. {{ s.monthly_fee }}</td><td><form method="post" action="{% url 'delete_student' s.pk %}" style="display:inline">{% csrf_token %}<button class="action-btn" onclick="return confirm('Delete this student record?')">Delete</button></form></td></tr>{% empty %}<tr><td colspan="7">No students found.</td></tr>{% endfor %}</tbody></table></div>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>MM School ERP</title><link rel="stylesheet" href="{% static 'css/app.css' %}"></head>
+<body>
+<div id="loginPage"><div class="login-box"><div class="logo">MM</div><h1>MM School ERP</h1><p>School Management System</p>
+{% if messages %}{% for message in messages %}<div class="notice"><strong>{{ message }}</strong></div>{% endfor %}{% endif %}
+<form method="post">{% csrf_token %}<div class="input-group"><label>Username</label><input name="username" placeholder="Enter username" required></div><div class="input-group"><label>Password</label><input name="password" type="password" placeholder="Enter password" required></div><button class="login-btn">Login</button></form>
+<div class="demo">Use the Django superuser account you create during setup.</div></div></div>
+</body></html>

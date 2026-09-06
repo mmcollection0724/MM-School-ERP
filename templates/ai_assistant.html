@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card" style="margin-bottom:20px;">
+
+    <h2>💬 Ask AI</h2>
+
+    <p style="color:#aaa; line-height:1.7;">
+        Ask questions about your school data.
+        For example: "Ali ne fees de di?"
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input
+            type="text"
+            name="question"
+            value="{{ question }}"
+            placeholder="Example: Ali ne fees de di?"
+            style="
+                width:100%;
+                padding:14px;
+                background:#111;
+                border:1px solid #333;
+                color:#fff;
+                border-radius:8px;
+                box-sizing:border-box;
+                margin-top:10px;
+                font-size:15px;
+            "
+            required
+        >
+
+        <button
+            type="submit"
+            style="
+                margin-top:12px;
+                padding:12px 22px;
+                background:#fff;
+                color:#000;
+                border:none;
+                border-radius:8px;
+                cursor:pointer;
+                font-weight:bold;
+            "
+        >
+            Ask AI
+        </button>
+
+    </form>
+
+    {% if answer %}
+        <div style="
+            margin-top:15px;
+            padding:15px;
+            background:#111;
+            border:1px solid #292929;
+            border-radius:8px;
+            color:#ddd;
+            line-height:1.7;
+        ">
+            <strong>🤖 Answer:</strong><br>
+            {{ answer }}
+        </div>
+    {% endif %}
+
+</div>
+
+<div class="page-header">
+    <div>
+        <h1>AI Assistant</h1>
+        <p>Smart school management insights</p>
+    </div>
+</div>
+
+<div class="card">
+
+    <h2>🤖 School AI Summary</h2>
+
+    <p style="color:#aaa; line-height:1.7;">
+        Your AI assistant has analyzed the current school ERP data.
+        Here is the latest overview of your school.
+    </p>
+
+</div>
+
+
+<div class="form-grid" style="margin-top:20px;">
+
+    <div class="card">
+        <h3>Students</h3>
+        <div style="font-size:30px; font-weight:bold;">
+            {{ student_count }}
+        </div>
+        <p style="color:#888;">Active students</p>
+    </div>
+
+    <div class="card">
+        <h3>Teachers / Staff</h3>
+        <div style="font-size:30px; font-weight:bold;">
+            {{ teacher_count }}
+        </div>
+        <p style="color:#888;">Active staff members</p>
+    </div>
+
+    <div class="card">
+        <h3>Attendance</h3>
+        <div style="font-size:30px; font-weight:bold;">
+            {{ attendance_percentage }}%
+        </div>
+        <p style="color:#888;">Overall attendance</p>
+    </div>
+
+</div>
+
+
+<div class="card" style="margin-top:20px;">
+
+    <h2>💰 Financial Overview</h2>
+
+    <div class="form-grid">
+
+        <div>
+            <p style="color:#888;">Fees Collected</p>
+            <h2>Rs. {{ total_fees }}</h2>
+        </div>
+
+        <div>
+            <p style="color:#888;">Paid Salaries</p>
+            <h2>Rs. {{ total_salary }}</h2>
+        </div>
+
+        <div>
+            <p style="color:#888;">Expenses</p>
+            <h2>Rs. {{ total_expenses }}</h2>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card" style="margin-top:20px;">
+
+    <h2>💡 AI Insights</h2>
+
+    {% if student_count == 0 %}
+
+        <p style="color:#aaa;">
+            No students have been added yet.
+        </p>
+
+    {% else %}
+
+        <p style="color:#aaa; line-height:1.8;">
+            Your school currently has
+            <strong>{{ student_count }}</strong>
+            active students and
+            <strong>{{ teacher_count }}</strong>
+            active teachers/staff.
+        </p>
+
+        <p style="color:#aaa; line-height:1.8;">
+            Current recorded attendance is
+            <strong>{{ attendance_percentage }}%</strong>.
+        </p>
+
+        <p style="color:#aaa; line-height:1.8;">
+            The system is tracking fees, salaries, expenses,
+            attendance and school notices.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<div class="card" style="margin-top:20px;">
+
+    <h2>📢 Recent Notices</h2>
+
+    {% if recent_notices %}
+
+        {% for notice in recent_notices %}
+
+            <div style="
+                padding:12px;
+                margin-top:10px;
+                border:1px solid #292929;
+                border-radius:8px;
+            ">
+
+                <strong>{{ notice.title }}</strong>
+
+                <div style="color:#777; margin-top:4px;">
+                    {{ notice.date }}
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p style="color:#888;">
+            No notices available.
+        </p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
